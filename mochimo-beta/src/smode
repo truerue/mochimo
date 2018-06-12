@@ -1,0 +1,64 @@
+#!/bin/sh
+#
+# Copyright (c) 2018 by Adequate Systems, LLC.  All Rights Reserved.
+# See LICENSE.TXT   **** NO WARRANTY ****
+#
+# Bring Mochimo online -- cold start into Safe Mode
+#
+if test -z $1
+then
+  echo 'usage: smode data_dir [parameter...]'
+  exit 1
+fi
+if test ! -f mochimo
+then
+   echo "Please cd to binary directory: no mochimo found."
+   exit 1
+fi
+if test ! -f dbackup.tgz
+then
+   echo "To use Safe Mode, dbackup.tgz must exist."
+   echo "Create with: tar -cvzf dbackup.tgz d"
+   exit 1
+fi
+if test ! -d $1/bc
+then
+   echo "no $1/bc directory!"
+   exit 1
+fi
+echo You are about to enter Mochimo Safe Mode.
+echo The $1 and $1/bc directories get reset from dbackup.tgz
+echo Press ctrl-c to cancel or RETURN to continue...
+read
+trap "" 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+trap ""  24 25 26 27 28 29 30 31
+trap "exit 0" term
+while true
+do
+rm -rf $1
+echo Restore from dbackup.tgz...
+tar -xvzf dbackup.tgz
+cd $1
+rm -f *.log *.lck *.lst
+cp ../coreip.lst .
+cp ../maddr.dat .
+# We are in d/ now
+echo remove some files...
+rm -f txclean.dat txq1.dat *.tmp
+rm -f mq.dat mirror.dat
+rm -f mseed.dat
+touch txq1.lck mq.lck
+#../mochimo -x345678 -e -l -t1 -d  $2 $3 $4 $5 $6 $7 $8 $9
+../mochimo -x345678 -e -p2094 -S $2 $3 $4 $5 $6 $7 $8 $9
+if test $? -eq 0
+then
+   echo Resume paused system with ./sresume
+   exit 0
+fi
+rm -f cblock.dat mblock.dat miner.tmp
+echo wait...
+sleep 30
+rm -f cblock.dat mblock.dat miner.tmp
+# RESTART  -- move back to bin/ from bin/d/
+cd ..
+done

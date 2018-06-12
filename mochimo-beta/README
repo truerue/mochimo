@@ -1,0 +1,56 @@
+/* Beta Tester Instructions
+ *
+ * Copyright (c) 2018 by Adequate Systems, LLC.  All Rights Reserved.
+ * See LICENSE.TXT   **** NO WARRANTY ****
+ *
+ * Date: 12 May 2018
+ *
+*/
+
+Welcome to the Mochimo Beta Test!
+
+GETTING STARTED
+You must read and agree to the LICENSE.TXT before proceeding.
+
+Basic System Requirements:
+Ubuntu 16.04 LTS 64-bit
+2+ Processor Threads (if running as VM)
+1+ GB of System Memory
+
+Package Contents:
+This package contains the Mochimo Betatest Software source code v20.  This code
+when compiled allows you to run a node on the Mochimo TestNet, and also mines
+the TestNet coins.  Included in the package is the command line wallet utility.
+Please read WALLET_GUIDE, and create your own personal wallet and mining
+address, before running the software.
+
+Compiling Instructions:
+The software includes a script for compiling the software, and installing the
+binaries in the ./bin directory.  To compile:
+cd ./src
+./makeunx bin
+./makeunx install
+
+Starting the Node/Miner:
+Change to the ./bin directory, and invoke the miner with the following command:
+cd ../bin
+./gomochi d
+
+Stopping the Node/Miner:
+Type CTRL+C and wait a moment for the monitor to appear.  Hit ? and <ENTER> to
+see options.  Type q and <ENTER> to exit.  Wait a few moments for the software
+to exit gracefully.
+
+Resuming the Miner:
+You may resume from where you left off (so that you don't have to resync your
+blocks) by typing:
+./resume d
+
+Networking Notes:
+The mochimo node is a "server" in the conventional sense, and must have direct
+access to the internet.  The port that Mochimo TestNet operates on is TCP 2094.
+If you are running the software behind a firewall, you will need to permit
+inbound connections on TCP 2094.  If you are running the software behind a
+router performing NAT, such as with a home internet connection, you will need
+to configure a static private IP on your Linux box, and Port Forwarding of port
+TCP 2094 to stat static private IP.

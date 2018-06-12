@@ -1,0 +1,40 @@
+@echo off
+rem Make a Win32 Wallet program
+rem Rename this file to makewal.bat
+rem
+rem Copyright (c) 2018 by Adequate Systems, LLC.  All Rights Reserved.
+rem See LICENSE.TXT   **** NO WARRANTY ****
+rem
+rem Date: 15 Dec 2017
+rem Revised: 10 May 2018
+rem
+rem ****************
+rem Set directories for  compiler command
+rem For Borland C++ for Win32  -- may change for your compiler
+rem     compiler              include dir         lib directory  compiler flags
+rem set CC=c:\u\bcc\bin\bcc32 -Ic:\u\bcc\include -Lc:\u\bcc\lib %1 %2 %3
+set CC=bcc32 -DWIN32 %1 %2 %3 %4
+rem Make sure that LONG64 is not defined in config.h!!!
+rem ****************
+if not exist makewal.bat goto usage
+rem ****************
+%CC% -c sha256.c >ccerror.log
+%CC% -c wots/wots.c    >>ccerror.log
+echo Building Mochimo Wallet...
+%CC% wallet.c  wots.obj sha256.obj  >>ccerror.log
+rem next line for Borland C++ 5.0
+del *.tds
+echo Compiler messages are in ccerror.log
+dir ccerror.log
+echo.
+echo Type 'wallet' to create a wallet.
+echo Type 'wallet filename' to use wallet filename.
+echo.
+goto end
+rem To make clean:
+rem del sha256.obj wots.obj wallet.obj
+:usage
+echo From source directory type:
+echo        makewal
+echo.
+:end
